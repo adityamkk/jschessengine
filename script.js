@@ -57,230 +57,29 @@ function numToCoord(num) {
 }
 
 //Piece functions
-
-function checkIfPawnWhite(source, target) {
-  if(piece.charAt(1) === 'P'){
-    if(!((coordToNum(target) === coordToNum(source)-8 && String(oldPos[target]).charAt(0) != 'b') ||
-        (coordToNum(target) === coordToNum(source)-16 && source.charAt(1) === '2' && String(oldPos[target]).charAt(0) != 'b' && String(oldPos[(coordToNum(target)+8).toString()]).charAt(0) != 'b') ||
-        (coordToNum(target) === coordToNum(source)-7 && String(oldPos[target]).charAt(0) === 'b') ||
-        (coordToNum(target) === coordToNum(source)-9 && String(oldPos[target]).charAt(0) === 'b'))){
-      return 'snapback';
-    }
-  }
-}
-
-function checkIfKnightWhite(source, target) {
-  if(piece.charAt(1) === 'N'){
-    console.log( (coordToNum(source)%8 - coordToNum(target)%8)**2 + (Math.floor(coordToNum(source)/8) - Math.floor(coordToNum(target)/8))**2);
-    if(!(((coordToNum(target) === coordToNum(source)-17) ||
-        (coordToNum(target) === coordToNum(source)-15) ||
-        (coordToNum(target) === coordToNum(source)-10) ||
-        (coordToNum(target) === coordToNum(source)-6) ||
-        (coordToNum(target) === coordToNum(source)+6) ||
-        (coordToNum(target) === coordToNum(source)+10) ||
-        (coordToNum(target) === coordToNum(source)+15) ||
-        (coordToNum(target) === coordToNum(source)+17)) && 
-        ( (coordToNum(source)%8 - coordToNum(target)%8)**2 + (Math.floor(coordToNum(source)/8) - Math.floor(coordToNum(target)/8))**2 <= 5))){
-      return 'snapback';
-    }
-  }
-}
-
-function checkIfKingWhite(source, target) {
-  if(piece.charAt(1) === 'K'){
-    if(!((coordToNum(target) === coordToNum(source)-9) ||
-        (coordToNum(target) === coordToNum(source)-8) ||
-        (coordToNum(target) === coordToNum(source)-7) ||
-        (coordToNum(target) === coordToNum(source)-1) ||
-        (coordToNum(target) === coordToNum(source)+1) ||
-        (coordToNum(target) === coordToNum(source)+7) ||
-        (coordToNum(target) === coordToNum(source)+8) ||
-        (coordToNum(target) === coordToNum(source)+9))){
-      return 'snapback';
-    }
-  }
-}
-
-function checkIfRookWhite(source, target) {
-  if(piece.charAt(1) === 'R'){
-    if(!((Math.floor(coordToNum(source)/8) === Math.floor(coordToNum(target)/8)) ||
-          coordToNum(source)%8 === coordToNum(target)%8)){
-      return 'snapback';
-    } else if(Math.floor(coordToNum(source)/8) === Math.floor(coordToNum(target)/8)){
-        if(coordToNum(source)-coordToNum(target) > 0){
-          for(var i = coordToNum(source)-1;i>coordToNum(target);i--){
-            if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-              return 'snapback';
-            }
-          }
-        } else {
-            for(var i = coordToNum(source)+1;i<coordToNum(target);i++){
-              if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-                return 'snapback';
-              }
-            }
-        }
-    } else if(coordToNum(source)%8 === coordToNum(target)%8){
-      if(coordToNum(source)-coordToNum(target) > 0){
-        for(var i = coordToNum(source)-8;i>coordToNum(target);i=i-8){
-          if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-            return 'snapback';
-          }
-        }
-      } else {
-          for(var i = coordToNum(source)+8;i<coordToNum(target);i=i+8){
-            if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-              return 'snapback';
-            }
-          }
-      }
-    }
-  }
-}
-
-function checkIfBishopWhite(source, target) {
-  if(piece.charAt(1) === 'B'){
-    if(!(Math.abs(Math.floor(coordToNum(target)/8)-Math.floor(coordToNum(source)/8)) === 
-        Math.abs(coordToNum(target)%8-coordToNum(source)%8))){
-      return 'snapback';
-    } else if(Math.floor(coordToNum(target)/8) < Math.floor(coordToNum(source)/8)){
-      if(coordToNum(target)%8 > coordToNum(source)%8){
-        for(var i = coordToNum(source)-7;i>coordToNum(target);i=i-7){
-          if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-            return 'snapback';
-          }
-        }
-      } else {
-        for(var i = coordToNum(source)-9;i>coordToNum(target);i=i-9){
-          if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-            return 'snapback';
-          }
-        }
-      }
+let moveValidation = {
+  checkIfPawn: function (source, target, color) {
+    let token = 0;
+    let opcolor = '';
+    if(color == 'w') {
+      token = 1;
+      opcolor = 'b';
     } else {
-      if(coordToNum(target)%8 > coordToNum(source)%8){
-        for(var i = coordToNum(source)+9;i<coordToNum(target);i=i+9){
-          if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-            return 'snapback';
-          }
-        }
-      } else {
-        for(var i = coordToNum(source)+7;i<coordToNum(target);i=i+7){
-          if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-            return 'snapback';
-          }
-        }
-      }
+      token = -1;
+      opcolor = 'w';
     }
-  }
-}
-
-function checkIfQueenWhite(source, target) {
-  if(piece.charAt(1) === 'Q'){
-    if(!((Math.abs(Math.floor(coordToNum(target)/8)-Math.floor(coordToNum(source)/8)) === 
-        Math.abs(coordToNum(target)%8-coordToNum(source)%8))||(Math.floor(coordToNum(source)/8) === Math.floor(coordToNum(target)/8)) ||
-        coordToNum(source)%8 === coordToNum(target)%8)){
-      return 'snapback';
-    } else if(Math.floor(coordToNum(source)/8) === Math.floor(coordToNum(target)/8)){
-      if(coordToNum(source)-coordToNum(target) > 0){
-        for(var i = coordToNum(source)-1;i>coordToNum(target);i--){
-          if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-            return 'snapback';
-          }
-        }
-      } else {
-          for(var i = coordToNum(source)+1;i<coordToNum(target);i++){
-            if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-              return 'snapback';
-            }
-          }
-      }
-    } else if(coordToNum(source)%8 === coordToNum(target)%8){
-      if(coordToNum(source)-coordToNum(target) > 0){
-        for(var i = coordToNum(source)-8;i>coordToNum(target);i=i-8){
-          if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-            return 'snapback';
-          }
-        }
-      } else {
-          for(var i = coordToNum(source)+8;i<coordToNum(target);i=i+8){
-            if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-              return 'snapback';
-            }
-          }
-      }
-    } else if(Math.floor(coordToNum(target)/8) < Math.floor(coordToNum(source)/8)){
-      if(coordToNum(target)%8 > coordToNum(source)%8){
-        for(var i = coordToNum(source)-7;i>coordToNum(target);i=i-7){
-          if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-            return 'snapback';
-          }
-        }
-      } else {
-        for(var i = coordToNum(source)-9;i>coordToNum(target);i=i-9){
-          if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-            return 'snapback';
-          }
-        }
-      }
-    } else {
-      if(coordToNum(target)%8 > coordToNum(source)%8){
-        for(var i = coordToNum(source)+9;i<coordToNum(target);i=i+9){
-          if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-            return 'snapback';
-          }
-        }
-      } else {
-        for(var i = coordToNum(source)+7;i<coordToNum(target);i=i+7){
-          if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-            return 'snapback';
-          }
-        }
-      }
-    }
-  }
-}
-
-let previousPosition = '';
-let stopAllMoves = false;
-
-function onDragStart(source, piece, position, orientation) {
-  if(stopAllMoves){
-    return 'snapback';
-  }
-  if ((orientation === 'white' && piece.search(/^w/) === -1) ||
-      (orientation === 'black' && piece.search(/^b/) === -1)) {
-        return false;
-      }
-}
-
-function onDrop (source,target,piece,newPos,oldPos,orientation) {
-  if(stopAllMoves){
-    return 'snapback';
-  }
-  console.log('Drag ended:');
-  console.log('Source: ' + source);
-  console.log('End:' + target);
-  console.log('Piece: ' + piece);
-  console.log('New Position: ' + Chessboard.objToFen(newPos));
-  console.log('Old Position: ' + Chessboard.objToFen(oldPos));
-  console.log('Orientation: ' + orientation);
-  console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
-  
-  //White Piece
-  if(orientation === 'white'){
-    if(String(oldPos[target]).charAt(0) === 'w'){return 'snapback';}
-    //Pawn
-    if(piece.charAt(1) === 'P'){
-      if(!((coordToNum(target) === coordToNum(source)-8 && String(oldPos[target]).charAt(0) != 'b') ||
-          (coordToNum(target) === coordToNum(source)-16 && source.charAt(1) === '2' && String(oldPos[target]).charAt(0) != 'b' && String(oldPos[(coordToNum(target)+8).toString()]).charAt(0) != 'b') ||
-          (coordToNum(target) === coordToNum(source)-7 && String(oldPos[target]).charAt(0) === 'b') ||
-          (coordToNum(target) === coordToNum(source)-9 && String(oldPos[target]).charAt(0) === 'b'))){
+    if(oldPos[source].charAt(1) === 'P'){
+      if(!((coordToNum(target) === coordToNum(source)-8*token && String(oldPos[target]).charAt(0) != opcolor) ||
+          (coordToNum(target) === coordToNum(source)-16*token && source.charAt(1) === `${4.5 - 2.5*token}` && String(oldPos[target]).charAt(0) != opcolor && String(oldPos[(coordToNum(target)+8).toString()]).charAt(0) != opcolor) ||
+          (coordToNum(target) === coordToNum(source)-7*token && String(oldPos[target]).charAt(0) === opcolor) ||
+          (coordToNum(target) === coordToNum(source)-9*token && String(oldPos[target]).charAt(0) === opcolor))){
         return 'snapback';
       }
     }
-    //Knight
-    if(piece.charAt(1) === 'N'){
+  },
+
+  checkIfKnightWhite: function (source, target) {
+    if(oldPos[source].charAt(1) === 'N'){
       console.log( (coordToNum(source)%8 - coordToNum(target)%8)**2 + (Math.floor(coordToNum(source)/8) - Math.floor(coordToNum(target)/8))**2);
       if(!(((coordToNum(target) === coordToNum(source)-17) ||
           (coordToNum(target) === coordToNum(source)-15) ||
@@ -294,8 +93,10 @@ function onDrop (source,target,piece,newPos,oldPos,orientation) {
         return 'snapback';
       }
     }
-    //King
-    if(piece.charAt(1) === 'K'){
+  },
+
+  checkIfKingWhite: function (source, target) {
+    if(oldPos[source].charAt(1) === 'K'){
       if(!((coordToNum(target) === coordToNum(source)-9) ||
           (coordToNum(target) === coordToNum(source)-8) ||
           (coordToNum(target) === coordToNum(source)-7) ||
@@ -307,8 +108,10 @@ function onDrop (source,target,piece,newPos,oldPos,orientation) {
         return 'snapback';
       }
     }
-    //Rook
-    if(piece.charAt(1) === 'R'){
+  },
+
+  checkIfRookWhite: function (source, target) {
+    if(oldPos[source].charAt(1) === 'R'){
       if(!((Math.floor(coordToNum(source)/8) === Math.floor(coordToNum(target)/8)) ||
             coordToNum(source)%8 === coordToNum(target)%8)){
         return 'snapback';
@@ -342,8 +145,10 @@ function onDrop (source,target,piece,newPos,oldPos,orientation) {
         }
       }
     }
-    //Bishop
-    if(piece.charAt(1) === 'B'){
+  },
+
+  checkIfBishopWhite: function (source, target) {
+    if(oldPos[source].charAt(1) === 'B'){
       if(!(Math.abs(Math.floor(coordToNum(target)/8)-Math.floor(coordToNum(source)/8)) === 
           Math.abs(coordToNum(target)%8-coordToNum(source)%8))){
         return 'snapback';
@@ -377,8 +182,10 @@ function onDrop (source,target,piece,newPos,oldPos,orientation) {
         }
       }
     }
-    //Queen
-    if(piece.charAt(1) === 'Q'){
+  },
+
+  checkIfQueenWhite: function (source, target) {
+    if(oldPos[source].charAt(1) === 'Q'){
       if(!((Math.abs(Math.floor(coordToNum(target)/8)-Math.floor(coordToNum(source)/8)) === 
           Math.abs(coordToNum(target)%8-coordToNum(source)%8))||(Math.floor(coordToNum(source)/8) === Math.floor(coordToNum(target)/8)) ||
           coordToNum(source)%8 === coordToNum(target)%8)){
@@ -441,13 +248,54 @@ function onDrop (source,target,piece,newPos,oldPos,orientation) {
         }
       }
     }
+  },
+};
+
+let previousPosition = '';
+let stopAllMoves = false;
+
+function onDragStart(source, piece, position, orientation) {
+  if(stopAllMoves){
+    return 'snapback';
+  }
+  if ((orientation === 'white' && piece.search(/^w/) === -1) ||
+      (orientation === 'black' && piece.search(/^b/) === -1)) {
+        return false;
+      }
+}
+
+function onDrop (source,target,piece,newPos,oldPos,orientation) {
+  if(stopAllMoves){
+    return 'snapback';
+  }
+  console.log('Drag ended:');
+  console.log('Source: ' + source);
+  console.log('End:' + target);
+  console.log('Piece: ' + piece);
+  console.log('New Position: ' + Chessboard.objToFen(newPos));
+  console.log('Old Position: ' + Chessboard.objToFen(oldPos));
+  console.log('Orientation: ' + orientation);
+  console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+  
+  //White Piece
+  if(orientation === 'white'){
+    if(String(oldPos[target]).charAt(0) === 'w'){return 'snapback';}
+    //Pawn
+    moveValidation.checkIfPawn(source, target, 'w');
+    //Knight
+    moveValidation.checkIfKnightWhite(source, target);
+    //King
+    moveValidation.checkIfKingWhite(source, target);
+    //Rook
+    moveValidation.checkIfRookWhite(source, target);
+    //Bishop
+    moveValidation.checkIfBishopWhite(source, target);
+    //Queen
+    moveValidation.checkIfQueenWhite(source, target);
   }
 
   //Black Piece
   if(orientation === 'black'){
-    console.log(coordToNum('a6'));
-    console.log(coordToNum('h5'));
-    console.log(newPos)
     let newPosEntries = Object.entries(newPos);
     let blackPiecePos = [];
 
