@@ -58,7 +58,7 @@ function numToCoord(num) {
 
 //Piece functions
 let moveValidation = {
-  checkIfPawn: function (source, target, color) {
+  checkIfPawn: function (source, target, color, oldPos) {
     let token = 0;
     let opcolor = '';
     if(color == 'w') {
@@ -78,7 +78,7 @@ let moveValidation = {
     }
   },
 
-  checkIfKnightWhite: function (source, target) {
+  checkIfKnightWhite: function (source, target, color, oldPos) {
     if(oldPos[source].charAt(1) === 'N'){
       console.log( (coordToNum(source)%8 - coordToNum(target)%8)**2 + (Math.floor(coordToNum(source)/8) - Math.floor(coordToNum(target)/8))**2);
       if(!(((coordToNum(target) === coordToNum(source)-17) ||
@@ -95,7 +95,7 @@ let moveValidation = {
     }
   },
 
-  checkIfKingWhite: function (source, target) {
+  checkIfKingWhite: function (source, target, color, oldPos) {
     if(oldPos[source].charAt(1) === 'K'){
       if(!((coordToNum(target) === coordToNum(source)-9) ||
           (coordToNum(target) === coordToNum(source)-8) ||
@@ -110,7 +110,7 @@ let moveValidation = {
     }
   },
 
-  checkIfRookWhite: function (source, target) {
+  checkIfRookWhite: function (source, target, color, oldPos) {
     if(oldPos[source].charAt(1) === 'R'){
       if(!((Math.floor(coordToNum(source)/8) === Math.floor(coordToNum(target)/8)) ||
             coordToNum(source)%8 === coordToNum(target)%8)){
@@ -147,7 +147,7 @@ let moveValidation = {
     }
   },
 
-  checkIfBishopWhite: function (source, target) {
+  checkIfBishopWhite: function (source, target, color, oldPos) {
     if(oldPos[source].charAt(1) === 'B'){
       if(!(Math.abs(Math.floor(coordToNum(target)/8)-Math.floor(coordToNum(source)/8)) === 
           Math.abs(coordToNum(target)%8-coordToNum(source)%8))){
@@ -184,7 +184,7 @@ let moveValidation = {
     }
   },
 
-  checkIfQueenWhite: function (source, target) {
+  checkIfQueenWhite: function (source, target, color, oldPos) {
     if(oldPos[source].charAt(1) === 'Q'){
       if(!((Math.abs(Math.floor(coordToNum(target)/8)-Math.floor(coordToNum(source)/8)) === 
           Math.abs(coordToNum(target)%8-coordToNum(source)%8))||(Math.floor(coordToNum(source)/8) === Math.floor(coordToNum(target)/8)) ||
@@ -281,17 +281,17 @@ function onDrop (source,target,piece,newPos,oldPos,orientation) {
   if(orientation === 'white'){
     if(String(oldPos[target]).charAt(0) === 'w'){return 'snapback';}
     //Pawn
-    moveValidation.checkIfPawn(source, target, 'w');
+    moveValidation.checkIfPawn(source, target, 'w', oldPos);
     //Knight
-    moveValidation.checkIfKnightWhite(source, target);
+    moveValidation.checkIfKnightWhite(source, target, 'w', oldPos);
     //King
-    moveValidation.checkIfKingWhite(source, target);
+    moveValidation.checkIfKingWhite(source, target, 'w', oldPos);
     //Rook
-    moveValidation.checkIfRookWhite(source, target);
+    moveValidation.checkIfRookWhite(source, target, 'w', oldPos);
     //Bishop
-    moveValidation.checkIfBishopWhite(source, target);
+    moveValidation.checkIfBishopWhite(source, target, 'w', oldPos);
     //Queen
-    moveValidation.checkIfQueenWhite(source, target);
+    moveValidation.checkIfQueenWhite(source, target, 'w', oldPos);
   }
 
   //Black Piece
