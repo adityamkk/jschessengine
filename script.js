@@ -78,9 +78,8 @@ let moveValidation = {
     }
   },
 
-  checkIfKnightWhite: function (source, target, color, oldPos) {
+  checkIfKnight: function (source, target, color, oldPos) {
     if(oldPos[source].charAt(1) === 'N'){
-      console.log( (coordToNum(source)%8 - coordToNum(target)%8)**2 + (Math.floor(coordToNum(source)/8) - Math.floor(coordToNum(target)/8))**2);
       if(!(((coordToNum(target) === coordToNum(source)-17) ||
           (coordToNum(target) === coordToNum(source)-15) ||
           (coordToNum(target) === coordToNum(source)-10) ||
@@ -326,19 +325,7 @@ function onDrop (source,target,piece,newPos,oldPos,orientation) {
         }
       }
       //Knight
-      if(oldPos[sourceTile].charAt(1) === 'N'){
-        if(!(((coordToNum(targetTile) === coordToNum(sourceTile)-17) ||
-            (coordToNum(targetTile) === coordToNum(sourceTile)-15) ||
-            (coordToNum(targetTile) === coordToNum(sourceTile)-10) ||
-            (coordToNum(targetTile) === coordToNum(sourceTile)-6) ||
-            (coordToNum(targetTile) === coordToNum(sourceTile)+6) ||
-            (coordToNum(targetTile) === coordToNum(sourceTile)+10) ||
-            (coordToNum(targetTile) === coordToNum(sourceTile)+15) ||
-            (coordToNum(targetTile) === coordToNum(sourceTile)+17)) &&
-            ((coordToNum(sourceTile)%8 - coordToNum(targetTile)%8)**2 + (Math.floor(coordToNum(sourceTile)/8) - Math.floor(coordToNum(sourceTile)/8))**2 <= 5))){
-          continue;
-        }
-      }
+      moveValidation.checkIfKnight(sourceTile, targetTile, 'b', oldPos);
       //King
       if(oldPos[sourceTile].charAt(1) === 'K'){
         if(!((coordToNum(targetTile) === coordToNum(sourceTile)-9) ||
