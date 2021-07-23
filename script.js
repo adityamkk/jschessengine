@@ -248,304 +248,7 @@ let moveValidation = {
       }
     }
   },
-  //AI Validation
-  checkIfPawnAI: function(sourceTile, targetTile, color, oldPos) {
-    let token = 0;
-    let opcolor = '';
-    if(color == 'w') {
-      token = 1;
-      opcolor = 'b';
-    } else {
-      token = -1;
-      opcolor = 'w';
-    }
-    if(oldPos[sourceTile].charAt(1) === 'P'){
-      if(!((coordToNum(targetTile) === coordToNum(sourceTile)-8*token && String(oldPos[targetTile]).charAt(0) != opcolor) ||
-          (coordToNum(targetTile) === coordToNum(sourceTile)-16*token && sourceTile.charAt(1) === `${4.5 - 2.5*token}` && String(oldPos[targetTile]).charAt(0) != opcolor && String(oldPos[(coordToNum(targetTile)+8).toString()]).charAt(0) != opcolor) ||
-          (coordToNum(targetTile) === coordToNum(sourceTile)-7*token && String(oldPos[targetTile]).charAt(0) === opcolor) ||
-          (coordToNum(targetTile) === coordToNum(sourceTile)-9*token && String(oldPos[targetTile]).charAt(0) === opcolor))){
-        continue;
-      }
-    }
-  },
-  checkIfKnightAI: function(sourceTile, targetTile, color, oldPos) {
-    if(oldPos[sourceTile].charAt(1) === 'N'){
-      if(!(((coordToNum(targetTile) === coordToNum(sourceTile)-17) ||
-          (coordToNum(targetTile) === coordToNum(sourceTile)-15) ||
-          (coordToNum(targetTile) === coordToNum(sourceTile)-10) ||
-          (coordToNum(targetTile) === coordToNum(sourceTile)-6) ||
-          (coordToNum(targetTile) === coordToNum(sourceTile)+6) ||
-          (coordToNum(targetTile) === coordToNum(sourceTile)+10) ||
-          (coordToNum(targetTile) === coordToNum(sourceTile)+15) ||
-          (coordToNum(targetTile) === coordToNum(sourceTile)+17)) && 
-          ( (coordToNum(sourceTile)%8 - coordToNum(targetTile)%8)**2 + (Math.floor(coordToNum(sourceTile)/8) - Math.floor(coordToNum(targetTile)/8))**2 <= 5))){
-        return 'snapback';
-      }
-    }
-  },
-  checkIfKingAI: function(sourceTile, targetTile, color, oldPos) {
-    if(oldPos[sourceTile].charAt(1) === 'K'){
-      if(!((coordToNum(targetTile) === coordToNum(sourceTile)-9) ||
-          (coordToNum(targetTile) === coordToNum(sourceTile)-8) ||
-          (coordToNum(targetTile) === coordToNum(sourceTile)-7) ||
-          (coordToNum(targetTile) === coordToNum(sourceTile)-1) ||
-          (coordToNum(targetTile) === coordToNum(sourceTile)+1) ||
-          (coordToNum(targetTile) === coordToNum(sourceTile)+7) ||
-          (coordToNum(targetTile) === coordToNum(sourceTile)+8) ||
-          (coordToNum(targetTile) === coordToNum(sourceTile)+9))){
-        continue;
-      }
-    }
-  },
-  checkIfRookAI: function(sourceTile, targetTile, color, oldPos) {
-    if(oldPos[sourceTile].charAt(1) === 'R'){
-      if(!((Math.floor(coordToNum(sourceTile)/8) === Math.floor(coordToNum(targetTile)/8)) ||
-            coordToNum(sourceTile)%8 === coordToNum(targetTile)%8)){
-        continue;
-      } else if(Math.floor(coordToNum(sourceTile)/8) === Math.floor(coordToNum(targetTile)/8)){
-          if(coordToNum(sourceTile)-coordToNum(targetTile) > 0){
-            for(var i = coordToNum(sourceTile)-1;i>coordToNum(targetTile);i--){
-              console.log(`${numToCoord(i)} and oldPos[numToCoord(i)] = ${String(oldPos[numToCoord(i)]).charAt(0)}`);
-              if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-                console.log('Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-                break;
-              }
-              else
-              {
-                console.log('Not Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-              }
-            }
-            continue;
-          } else {
-              for(var i = coordToNum(sourceTile)+1;i<coordToNum(targetTile);i++){
-                console.log(`${numToCoord(i)} and oldPos[numToCoord(i)] = ${String(oldPos[numToCoord(i)]).charAt(0)}`);
-                if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-                  console.log('Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-                  break;
-                }
-                else
-                {
-                  console.log('Not Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-                }
-              }
-              continue;
-          }
-      } else if(coordToNum(sourceTile)%8 === coordToNum(targetTile)%8){
-        if(coordToNum(sourceTile)-coordToNum(targetTile) > 0){
-          for(var i = coordToNum(sourceTile)-8;i>coordToNum(targetTile);i=i-8){
-            console.log(`${numToCoord(i)} and oldPos[numToCoord(i)] = ${String(oldPos[numToCoord(i)]).charAt(0)}`);
-            if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-              console.log('Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-              break;
-            }
-            else
-            {
-              console.log('Not Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-            }
-          }
-          continue;
-        } else {
-            for(var i = coordToNum(sourceTile)+8;i<coordToNum(targetTile);i=i+8){
-              console.log(`${numToCoord(i)} and oldPos[numToCoord(i)] = ${String(oldPos[numToCoord(i)]).charAt(0)}`);
-              if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-                console.log('Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-                break;
-              }
-              else
-              {
-                console.log('Not Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-              }
-            }
-            continue;
-        }
-      }
-    }
-  },
-  checkIfBishopAI: function(sourceTile, targetTile, color, oldPos) {
-    if(oldPos[sourceTile].charAt(1) === 'B'){
-      if(!(Math.abs(Math.floor(coordToNum(targetTile)/8)-Math.floor(coordToNum(sourceTile)/8)) === 
-          Math.abs(coordToNum(targetTile)%8-coordToNum(sourceTile)%8))){
-        continue;
-      } else if(Math.floor(coordToNum(targetTile)/8) < Math.floor(coordToNum(sourceTile)/8)){
-        if(coordToNum(targetTile)%8 > coordToNum(sourceTile)%8){
-          for(var i = coordToNum(sourceTile)-7;i>coordToNum(targetTile);i=i-7){
-            console.log(`${numToCoord(i)} and oldPos[numToCoord(i)] = ${String(oldPos[numToCoord(i)]).charAt(0)}`);
-            if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-              console.log('Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-              break;
-            }
-            else
-            {
-              console.log('Not Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-            }
-          }
-          continue;
-        } else {
-          for(var i = coordToNum(sourceTile)-9;i>coordToNum(targetTile);i=i-9){
-            console.log(`${numToCoord(i)} and oldPos[numToCoord(i)] = ${String(oldPos[numToCoord(i)]).charAt(0)}`);
-            if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-              console.log('Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-              break;
-            }
-            else
-            {
-              console.log('Not Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-            }
-          }
-          continue;
-        }
-      } else {
-        if(coordToNum(targetTile)%8 > coordToNum(sourceTile)%8){
-          for(var i = coordToNum(sourceTile)+9;i<coordToNum(targetTile);i=i+9){
-            console.log(`${numToCoord(i)} and oldPos[numToCoord(i)] = ${String(oldPos[numToCoord(i)]).charAt(0)}`);
-            if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-              console.log('Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-              break;
-            }
-            else
-            {
-              console.log('Not Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-            }
-          }
-          continue;
-        } else {
-          for(var i = coordToNum(sourceTile)+7;i<coordToNum(targetTile);i=i+7){
-            console.log(`${numToCoord(i)} and oldPos[numToCoord(i)] = ${String(oldPos[numToCoord(i)]).charAt(0)}`);
-            if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-              console.log('Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-              break;
-            }
-            else
-            {
-              console.log('Not Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-            }
-          }
-          continue;
-        }
-      }
-    }
-  },
-  checkIfQueenAI: function(sourceTile, targetTile, color, oldPos) {
-    if(oldPos[sourceTile].charAt(1) === 'Q'){
-      if(!((Math.abs(Math.floor(coordToNum(targetTile)/8)-Math.floor(coordToNum(sourceTile)/8)) === 
-          Math.abs(coordToNum(targetTile)%8-coordToNum(sourceTile)%8))||(Math.floor(coordToNum(sourceTile)/8) === Math.floor(coordToNum(targetTile)/8)) ||
-          coordToNum(sourceTile)%8 === coordToNum(targetTile)%8)){
-        continue;
-      } else if(Math.floor(coordToNum(sourceTile)/8) === Math.floor(coordToNum(targetTile)/8)){
-        if(coordToNum(sourceTile)-coordToNum(targetTile) > 0){
-          for(var i = coordToNum(sourceTile)-1;i>coordToNum(targetTile);i--){
-            console.log(`${numToCoord(i)} and oldPos[numToCoord(i)] = ${String(oldPos[numToCoord(i)]).charAt(0)}`);
-            if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-              console.log('Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-              break;
-            }
-            else
-            {
-              console.log('Not Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-            }
-          }
-          continue;
-        } else {
-            for(var i = coordToNum(sourceTile)+1;i<coordToNum(targetTile);i++){
-              console.log(`${numToCoord(i)} and oldPos[numToCoord(i)] = ${String(oldPos[numToCoord(i)]).charAt(0)}`);
-              if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-                console.log('Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-                break;
-              }
-              else
-              {
-                console.log('Not Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-              }
-            }
-            continue;
-        }
-      } else if(coordToNum(sourceTile)%8 === coordToNum(targetTile)%8){
-        if(coordToNum(sourceTile)-coordToNum(targetTile) > 0){
-          for(var i = coordToNum(sourceTile)-8;i>coordToNum(targetTile);i=i-8){
-            console.log(`${numToCoord(i)} and oldPos[numToCoord(i)] = ${String(oldPos[numToCoord(i)]).charAt(0)}`);
-            if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-              console.log('Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-              break;
-            }
-            else
-            {
-              console.log('Not Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-            }
-          }
-          continue;
-        } else {
-            for(var i = coordToNum(sourceTile)+8;i<coordToNum(targetTile);i=i+8){
-              console.log(`${numToCoord(i)} and oldPos[numToCoord(i)] = ${String(oldPos[numToCoord(i)]).charAt(0)}`);
-              if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-                console.log('Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-                break;
-              }
-              else
-              {
-                console.log('Not Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-              }
-            }
-            continue;
-        }
-      } else if(Math.floor(coordToNum(targetTile)/8) < Math.floor(coordToNum(sourceTile)/8)){
-        if(coordToNum(targetTile)%8 > coordToNum(sourceTile)%8){
-          for(var i = coordToNum(sourceTile)-7;i>coordToNum(targetTile);i=i-7){
-            console.log(`${numToCoord(i)} and oldPos[numToCoord(i)] = ${String(oldPos[numToCoord(i)]).charAt(0)}`);
-            if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-              console.log('Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-              break;
-            }
-            else
-            {
-              console.log('Not Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-            }
-          }
-          continue;
-        } else {
-          for(var i = coordToNum(sourceTile)-9;i>coordToNum(targetTile);i=i-9){
-            console.log(`${numToCoord(i)} and oldPos[numToCoord(i)] = ${String(oldPos[numToCoord(i)]).charAt(0)}`);
-            if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-              console.log('Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-              break;
-            }
-            else
-            {
-              console.log('Not Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-            }
-          }
-          continue;
-        }
-      } else {
-        if(coordToNum(targetTile)%8 > coordToNum(sourceTile)%8){
-          for(var i = coordToNum(sourceTile)+9;i<coordToNum(targetTile);i=i+9){
-            console.log(`${numToCoord(i)} and oldPos[numToCoord(i)] = ${String(oldPos[numToCoord(i)]).charAt(0)}`);
-            if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-              console.log('Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-              break;
-            }
-            else
-            {
-              console.log('Not Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-            }
-          }
-          continue
-        } else {
-          for(var i = coordToNum(sourceTile)+7;i<coordToNum(targetTile);i=i+7){
-            console.log(`${numToCoord(i)} and oldPos[numToCoord(i)] = ${String(oldPos[numToCoord(i)]).charAt(0)}`);
-            if(String(oldPos[numToCoord(i)]).charAt(0) == 'b' || String(oldPos[numToCoord(i)]).charAt(0) == 'w'){
-              console.log('Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-              break;
-            }
-            else
-            {
-              console.log('Not Continue: '+String(oldPos[numToCoord(i)]).charAt(0));
-            }
-          }
-          continue;
-        }
-      }
-    }
-  },
+  
 };
 
 let previousPosition = '';
@@ -614,17 +317,29 @@ function onDrop (source,target,piece,newPos,oldPos,orientation) {
 
       if(String(oldPos[targetTile]).charAt(0) === 'b'){continue;}
       //Pawn
-      moveValidation.checkIfPawnAI(sourceTile, targetTile, 'b', oldPos);
+      if(moveValidation.checkIfPawnAI(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
+        continue;
+      }
       //Knight
-      moveValidation.checkIfKnightAI(sourceTile, targetTile, 'b', oldPos);
+      if(moveValidation.checkIfKnightAI(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
+        continue;
+      };
       //King
-      moveValidation.checkIfKingAI(sourceTile, targetTile, 'b', oldPos);
+      if(moveValidation.checkIfKingAI(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
+        continue;
+      };
       //Rook
-      moveValidation.checkIfRookAI(sourceTile, targetTile, 'b', oldPos);
+      if(moveValidation.checkIfRookAI(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
+        continue;
+      };
       //Bishop
-      moveValidation.checkIfBishopAI(sourceTile, targetTile, 'b', oldPos);
+      if(moveValidation.checkIfBishopAI(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
+        continue;
+      };
       //Queen
-      moveValidation.checkIfQueenAI(sourceTile, targetTile, 'b', oldPos);
+      if(moveValidation.checkIfQueenAI(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
+        continue;
+      };
       isLegal = true;
     };
 
