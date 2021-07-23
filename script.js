@@ -69,10 +69,11 @@ let moveValidation = {
       opcolor = 'w';
     }
     if(oldPos[source].charAt(1) === 'P'){
-      if(!((coordToNum(target) === coordToNum(source)-8*token && String(oldPos[target]).charAt(0) != opcolor) ||
+      if(!(((coordToNum(target) === coordToNum(source)-8*token && String(oldPos[target]).charAt(0) != opcolor) ||
           (coordToNum(target) === coordToNum(source)-16*token && source.charAt(1) === `${4.5 - 2.5*token}` && String(oldPos[target]).charAt(0) != opcolor && String(oldPos[(coordToNum(target)+8).toString()]).charAt(0) != opcolor) ||
           (coordToNum(target) === coordToNum(source)-7*token && String(oldPos[target]).charAt(0) === opcolor) ||
-          (coordToNum(target) === coordToNum(source)-9*token && String(oldPos[target]).charAt(0) === opcolor))){
+          (coordToNum(target) === coordToNum(source)-9*token && String(oldPos[target]).charAt(0) === opcolor)) &&
+          ((coordToNum(source)%8 - coordToNum(target)%8)**2 + (Math.floor(coordToNum(source)/8) - Math.floor(coordToNum(target)/8))**2 <= 5))){
         return 'snapback';
       }
     }
@@ -88,7 +89,7 @@ let moveValidation = {
           (coordToNum(target) === coordToNum(source)+10) ||
           (coordToNum(target) === coordToNum(source)+15) ||
           (coordToNum(target) === coordToNum(source)+17)) && 
-          ( (coordToNum(source)%8 - coordToNum(target)%8)**2 + (Math.floor(coordToNum(source)/8) - Math.floor(coordToNum(target)/8))**2 <= 5))){
+          ((coordToNum(source)%8 - coordToNum(target)%8)**2 + (Math.floor(coordToNum(source)/8) - Math.floor(coordToNum(target)/8))**2 <= 5))){
         return 'snapback';
       }
     }
@@ -317,27 +318,27 @@ function onDrop (source,target,piece,newPos,oldPos,orientation) {
 
       if(String(oldPos[targetTile]).charAt(0) === 'b'){continue;}
       //Pawn
-      if(moveValidation.checkIfPawnAI(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
+      if(moveValidation.checkIfPawn(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
         continue;
       }
       //Knight
-      if(moveValidation.checkIfKnightAI(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
+      if(moveValidation.checkIfKnight(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
         continue;
       };
       //King
-      if(moveValidation.checkIfKingAI(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
+      if(moveValidation.checkIfKing(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
         continue;
       };
       //Rook
-      if(moveValidation.checkIfRookAI(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
+      if(moveValidation.checkIfRook(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
         continue;
       };
       //Bishop
-      if(moveValidation.checkIfBishopAI(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
+      if(moveValidation.checkIfBishop(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
         continue;
       };
       //Queen
-      if(moveValidation.checkIfQueenAI(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
+      if(moveValidation.checkIfQueen(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
         continue;
       };
       isLegal = true;
