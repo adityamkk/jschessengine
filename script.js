@@ -56,6 +56,22 @@ function numToCoord(num) {
   }
 }
 
+function moveValue(source, target, color, oldPos) {
+  //Returns a number based on how good a move is with depth 1
+  let totalPoints = 0;
+  if(oldPos[target].charAt(0) === 'b') {
+    switch(oldPos[target].charAt(1)) {
+      case 'P': totalPoints = totalPoints + 1; break;
+      case 'N': totalPoints = totalPoints + 3; break;
+      case 'K': totalPoints = totalPoints + 1000; break;
+      case 'R': totalPoints = totalPoints + 5; break;
+      case 'B': totalPoints = totalPoints + 3; break;
+      case 'Q': totalPoints = totalPoints + 9; break;
+    }
+  }
+  return totalPoints;
+}
+
 //Piece functions
 let moveValidation = {
   checkIfPawn: function (source, target, color, oldPos) {
@@ -310,6 +326,20 @@ function onDrop (source,target,piece,newPos,oldPos,orientation) {
     let sourceTile = '';
     let targetTile = '';
 
+    // AI generated random moves
+    let newPosEntries = Object.entries(newPos);
+    let blackPiecePos = [];
+
+    for(let [pos,piece] of newPosEntries) {
+      if(piece.includes('b')){
+        blackPiecePos.push(pos);
+      }
+    };
+    console.log(blackPiecePos);
+    let isLegal = false;
+    let sourceTile = '';
+    let targetTile = '';
+
     while(isLegal === false) {
       sourceTile = blackPiecePos[getRandomInt(blackPiecePos.length)];
       targetTile = numToCoord(getRandomInt(64));
@@ -343,10 +373,10 @@ function onDrop (source,target,piece,newPos,oldPos,orientation) {
       };
       isLegal = true;
     };
-
+    
     if(isLegal) {board.move(`${sourceTile}-${targetTile}`)};
-
-    /*
+    //
+    /* Two player
     if(String(oldPos[target]).charAt(0) === 'b'){return 'snapback';}
     //Pawn
     moveValidation.checkIfPawn(source, target, 'b', oldPos);
