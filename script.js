@@ -326,7 +326,7 @@ function onDrop (source,target,piece,newPos,oldPos,orientation) {
     let sourceTile = '';
     let targetTile = '';
 
-    // AI generated random moves
+    /* AI generated random moves
     let newPosEntries = Object.entries(newPos);
     let blackPiecePos = [];
 
@@ -375,7 +375,7 @@ function onDrop (source,target,piece,newPos,oldPos,orientation) {
     };
     
     if(isLegal) {board.move(`${sourceTile}-${targetTile}`)};
-    //
+    */
     /* Two player
     if(String(oldPos[target]).charAt(0) === 'b'){return 'snapback';}
     //Pawn
