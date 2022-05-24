@@ -1,3 +1,5 @@
+//NEED TO IMPORT LODASH MODULE
+//import _ from "lodash";
 
 function sleep(milliseconds) {
   const date = Date.now();
@@ -313,6 +315,7 @@ function onDrop (source,target,piece,newPos,oldPos,orientation) {
 
   //Black Piece
   if(orientation === 'black'){
+    /* AI generated moves NOT COMPLETE
     let newPosEntries = Object.entries(newPos);
     let blackPiecePos = [];
 
@@ -325,8 +328,57 @@ function onDrop (source,target,piece,newPos,oldPos,orientation) {
     let isLegal = false;
     let sourceTile = '';
     let targetTile = '';
+    let legalMoves = [];
+    let moveObject = {
+      source: '',
+      target: '',
+      value: '',
+    };
 
-    /* AI generated random moves
+    for(piece of blackPiecePos) {
+      for(square of 64) {
+        isLegal = false;
+        sourceTile = piece;
+        targetTile = numToCoord(square);
+
+        if(String(oldPos[targetTile]).charAt(0) === 'b'){continue;}
+        //Pawn
+        if(moveValidation.checkIfPawn(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
+          continue;
+        }
+        //Knight
+        if(moveValidation.checkIfKnight(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
+          continue;
+        };
+        //King
+        if(moveValidation.checkIfKing(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
+          continue;
+        };
+        //Rook
+        if(moveValidation.checkIfRook(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
+          continue;
+        };
+        //Bishop
+        if(moveValidation.checkIfBishop(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
+          continue;
+        };
+        //Queen
+        if(moveValidation.checkIfQueen(sourceTile, targetTile, 'b', oldPos) == 'snapback') {
+          continue;
+        };
+
+        if(isLegal) {
+          moveObject.source = sourceTile;
+          moveObject.target = targetTile;
+          moveObject.value = moveValue(sourceTile, targetTile, 'b', oldPos);
+          legalMoves.push(_.cloneDeep(moveObject));
+        }
+      }
+    }
+
+    console.log(legalMoves);
+    */
+    // AI generated random moves
     let newPosEntries = Object.entries(newPos);
     let blackPiecePos = [];
 
@@ -375,7 +427,7 @@ function onDrop (source,target,piece,newPos,oldPos,orientation) {
     };
     
     if(isLegal) {board.move(`${sourceTile}-${targetTile}`)};
-    */
+    //
     /* Two player
     if(String(oldPos[target]).charAt(0) === 'b'){return 'snapback';}
     //Pawn
