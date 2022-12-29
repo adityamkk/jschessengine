@@ -11,3 +11,7 @@ Uses drag and drop mechanic, snaps back if move is invalid.
 Two player mode and random move mode are available within the code.
 
 Bugs are very prevalent in the code, needs major adjustments.
+
+## License
+
+Creative Commons Universal
